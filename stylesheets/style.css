@@ -51,6 +51,7 @@ body {
   padding: 20px;
   overflow: scroll;
 }
+/* We add position relative on our car cards so that we can use position absolute on buttons */
 .car {
   position: relative;
   display: flex;

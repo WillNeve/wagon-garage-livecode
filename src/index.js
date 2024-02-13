@@ -1,43 +1,47 @@
-// wagon garage api url
+// Declare wagon-garage api url using our custom garage slug of choice
 const garage = 'turbo';
 const url = `https://wagon-garage-api.herokuapp.com/${garage}/cars`;
 
-// input element querySelectors;
+// Select our input elements from DOM and save references to variables
 const brandInput = document.querySelector('input[name="brand"]'); // we can select an input by its name attribute
 const modelInput = document.querySelector('#model');
 const plateInput = document.querySelector('#plate');
 const ownerInput = document.querySelector('#owner');
 
-// list element querySelector
+// Select the list element (cards container) from DOM and save reference to variable
 const list = document.querySelector('.cars-list');
 
 // function that retrieves cars array from wagon api and adds a card to list for each result
 const getCars = () => {
   fetch(url).then((resp) => resp.json()).then((data) => {
-    // the data object itself is the cars array in this case
-    const cars = data;
-    // remove any existing cars from the list to 'refresh'
+    // Set the list contents to empty to remove any existing cars before loading them again
     list.innerHTML = '';
+    // we can console log the data object to familiarise ourselves with its structure
+    console.log(data);
+    // In this case, our data object itself is the array of cars
+    const cars = data; // we make this more readable by declaring that
     // iterate through each car
     cars.forEach((car) => {
-      // interpolate car specific data into template literal representing the markup of a car card
-      const carTemplate = `<div class="car">
-        <div class="car-image">
-          <img src="https://images.unsplash.com/photo-1624543367162-5a067d572c02?q=80&w=2264&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
-        </div>
-        <div class="car-info">
-          <h4>${car.brand} ${car.model}</h4>
-          <p><strong>Owner:</strong>${car.owner}</p>
-          <p><strong>Plate:</strong>${car.plate}</p>
-        </div>
-        <button type='button' data-id='${car.id}'><i class="fa-solid fa-x"></i></button>
-      </div>`
-      // add car card into list
+      // interpolate car specific data into respective place in our car card template (HTML markup)
+      const carTemplate = `
+        <div class="car">
+          <div class="car-image">
+            <img src="https://images.unsplash.com/photo-1624543367162-5a067d572c02?q=80&w=2264&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+          </div>
+          <div class="car-info">
+            <h4>${car.brand} ${car.model}</h4>
+            <p><strong>Owner:</strong>${car.owner}</p>
+            <p><strong>Plate:</strong>${car.plate}</p>
+          </div>
+          <!-- We add a custom data arribute holding the id of the car the button is assigned to -->
+          <button type='button' data-id='${car.id}'><i class="fa-solid fa-x"></i></button>
+        </div>`
+      // add car card (HTML) into end of list contents
       list.insertAdjacentHTML('beforeend', carTemplate)
     })
   })
 
-  // wait a small amount for the DOM to be updated, then:
+  // wait a small amount for the DOM to be updated with these new items, then:
   setTimeout(() => {
     // select all card destroy buttons
     const buttons = document.querySelectorAll("button.destroy"); // button element with class destroy
